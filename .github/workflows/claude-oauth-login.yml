@@ -122,7 +122,7 @@ jobs:
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "**Code:** \`${{ inputs.authorization_code }}\`" >> $GITHUB_STEP_SUMMARY
             echo "**Timestamp:** $(date)" >> $GITHUB_STEP_SUMMARY
-            G
+            
             # Here you would typically exchange the code for tokens
             echo "Authorization code: ${{ inputs.authorization_code }}"
             echo "Next step would be to exchange this code for access tokens"
