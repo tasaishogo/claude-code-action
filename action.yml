@@ -77,6 +77,10 @@ inputs:
     description: "Claude AI OAuth token expiration timestamp (required when use_oauth is true)"
     required: false
     default: ""
+  secrets_admin_pat:
+    description: 'Personal Access Token with secrets:write permission to refresh OAuth tokens (required when use_oauth is true)'
+    required: false
+    default: ''
 
   max_turns:
     description: "Maximum number of conversation turns"
@@ -126,7 +130,7 @@ runs:
     - name: Run Claude Code
       id: claude-code
       if: steps.prepare.outputs.contains_trigger == 'true'
-      uses: grll/claude-code-base-action@83c1d87085aace6d7d9334e7f2be763049fd54da # Latest commit from fork with critical fix
+      uses: grll/claude-code-base-action@2a39af4aa64ec9820abb60cf4dea094225e84e48 # Latest commit from fork with critical fix
       with:
         prompt_file: ${{ runner.temp }}/claude-prompts/claude-prompt.txt
         allowed_tools: ${{ env.ALLOWED_TOOLS }}
@@ -142,6 +146,7 @@ runs:
         claude_access_token: ${{ inputs.claude_access_token }}
         claude_refresh_token: ${{ inputs.claude_refresh_token }}
         claude_expires_at: ${{ inputs.claude_expires_at }}
+        secrets_admin_pat: ${{ inputs.secrets_admin_pat }}
         claude_env: ${{ inputs.claude_env }}
       env:
         # Model configuration
