@@ -9,10 +9,10 @@ We've released an installer script that walks you through the complete setup pro
 
 ```bash
 # cd into your repo
-bash <(curl -fsSL https://raw.githubusercontent.com/grll/claude-code-grll-installer/main/installer.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/grll/claude-code-action/main/scripts/installer.sh)
 ```
 
-More details about the installer [here](https://github.com/grll/claude-code-grll-installer).
+More details about the installer [here](https://github.com/grll/claude-code-action/tree/main/scripts#readme).
 
 ### Key Improvements:
 - **✅ Fixed Token Expiry Issue (#2)**: The action now automatically refreshes OAuth tokens using a GitHub Personal Access Token (PAT). Learn how to create the PAT [here](https://github.com/grll/claude-code-login?tab=readme-ov-file#prerequisites-setting-up-secrets_admin_pat). After creating the PAT, you must add it to your repository secrets as `SECRETS_ADMIN_PAT` and include it in your action configuration.
