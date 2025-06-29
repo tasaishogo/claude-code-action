@@ -2,6 +2,24 @@
 
 # Claude Code Action (OAuth Fork)
 
+## 🚀 Recent Update (2025-06-29)
+
+### **🎉 NEW: One-Command Installer Script**
+We've released an installer script that walks you through the complete setup process for your repo! Simply run:
+
+```bash
+# cd into your repo
+bash <(curl -fsSL https://raw.githubusercontent.com/grll/claude-code-grll-installer/main/installer.sh)
+```
+
+More details about the installer [here](https://github.com/grll/claude-code-grll-installer).
+
+### Key Improvements:
+- **✅ Fixed Token Expiry Issue (#2)**: The action now automatically refreshes OAuth tokens using a GitHub Personal Access Token (PAT). Learn how to create the PAT [here](https://github.com/grll/claude-code-login?tab=readme-ov-file#prerequisites-setting-up-secrets_admin_pat).
+- **🔄 New OAuth Branch Creation**: We've created a new GitHub action that creates an "OAuth" branch without invalidating your local OAuth setup: https://github.com/grll/claude-code-login
+
+---
+
 **This is a fork of the official Claude Code Action that adds support for OAuth authentication, allowing Claude Max subscribers to use their subscription in GitHub Actions.**
 
 **How to use this fork**: https://grll.bearblog.dev/use-claude-github-actions-with-claude-max/
