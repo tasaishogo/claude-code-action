@@ -15,7 +15,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/grll/claude-code-grll-instal
 More details about the installer [here](https://github.com/grll/claude-code-grll-installer).
 
 ### Key Improvements:
-- **✅ Fixed Token Expiry Issue (#2)**: The action now automatically refreshes OAuth tokens using a GitHub Personal Access Token (PAT). Learn how to create the PAT [here](https://github.com/grll/claude-code-login?tab=readme-ov-file#prerequisites-setting-up-secrets_admin_pat).
+- **✅ Fixed Token Expiry Issue (#2)**: The action now automatically refreshes OAuth tokens using a GitHub Personal Access Token (PAT). Learn how to create the PAT [here](https://github.com/grll/claude-code-login?tab=readme-ov-file#prerequisites-setting-up-secrets_admin_pat). After creating the PAT, you must add it to your repository secrets as `SECRETS_ADMIN_PAT` and include it in your action configuration.
 - **🔄 New OAuth Branch Creation**: We've created a new GitHub action that creates an "OAuth" branch without invalidating your local OAuth setup: https://github.com/grll/claude-code-login
 
 ---
@@ -71,6 +71,7 @@ This fork allows Claude Max subscribers to use their subscription in GitHub Acti
    - `CLAUDE_ACCESS_TOKEN`: Your Claude OAuth access token
    - `CLAUDE_REFRESH_TOKEN`: Your Claude OAuth refresh token
    - `CLAUDE_EXPIRES_AT`: The token expiration timestamp
+   - `SECRETS_ADMIN_PAT`: Your GitHub Personal Access Token with `secrets:write` permission (for auto-refreshing tokens)
 4. Use the OAuth configuration in your workflow (see examples below)
 
 ## 📚 FAQ
@@ -120,6 +121,7 @@ jobs:
           claude_access_token: ${{ secrets.CLAUDE_ACCESS_TOKEN }}
           claude_refresh_token: ${{ secrets.CLAUDE_REFRESH_TOKEN }}
           claude_expires_at: ${{ secrets.CLAUDE_EXPIRES_AT }}
+          secrets_admin_pat: ${{ secrets.SECRETS_ADMIN_PAT }}
           
           timeout_minutes: "60"
           # Optional: add custom trigger phrase (default: @claude)
@@ -144,6 +146,7 @@ jobs:
 | `claude_access_token` | Claude AI OAuth access token (required when use_oauth is true)                                                       | No       | -         |
 | `claude_refresh_token`| Claude AI OAuth refresh token (required when use_oauth is true)                                                      | No       | -         |
 | `claude_expires_at`   | Claude AI OAuth token expiration timestamp (required when use_oauth is true)                                         | No       | -         |
+| `secrets_admin_pat`   | Personal Access Token with secrets:write permission to refresh OAuth tokens (required when use_oauth is true)        | No       | -         |
 | `direct_prompt`       | Direct prompt for Claude to execute automatically without needing a trigger (for automated workflows)                | No       | -         |
 | `max_turns`           | Maximum number of conversation turns Claude can take (limits back-and-forth exchanges)                               | No       | -         |
 | `timeout_minutes`     | Timeout in minutes for execution                                                                                     | No       | `30`      |
@@ -171,9 +174,13 @@ The `mcp_config` input allows you to add custom MCP (Model Context Protocol) ser
 #### Basic Example: Adding a Sequential Thinking Server
 
 ```yaml
-- uses: anthropics/claude-code-action@beta
+- uses: grll/claude-code-action@beta
   with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+    use_oauth: true
+    claude_access_token: ${{ secrets.CLAUDE_ACCESS_TOKEN }}
+    claude_refresh_token: ${{ secrets.CLAUDE_REFRESH_TOKEN }}
+    claude_expires_at: ${{ secrets.CLAUDE_EXPIRES_AT }}
+    secrets_admin_pat: ${{ secrets.SECRETS_ADMIN_PAT }}
     mcp_config: |
       {
         "mcpServers": {
@@ -195,9 +202,13 @@ The `mcp_config` input allows you to add custom MCP (Model Context Protocol) ser
 For MCP servers that require sensitive information like API keys or tokens, use GitHub Secrets in the environment variables:
 
 ```yaml
-- uses: anthropics/claude-code-action@beta
+- uses: grll/claude-code-action@beta
   with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+    use_oauth: true
+    claude_access_token: ${{ secrets.CLAUDE_ACCESS_TOKEN }}
+    claude_refresh_token: ${{ secrets.CLAUDE_REFRESH_TOKEN }}
+    claude_expires_at: ${{ secrets.CLAUDE_EXPIRES_AT }}
+    secrets_admin_pat: ${{ secrets.SECRETS_ADMIN_PAT }}
     mcp_config: |
       {
         "mcpServers": {
@@ -219,9 +230,13 @@ For MCP servers that require sensitive information like API keys or tokens, use 
 For Python-based MCP servers managed with `uv`, you need to specify the directory containing your server:
 
 ```yaml
-- uses: anthropics/claude-code-action@beta
+- uses: grll/claude-code-action@beta
   with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+    use_oauth: true
+    claude_access_token: ${{ secrets.CLAUDE_ACCESS_TOKEN }}
+    claude_refresh_token: ${{ secrets.CLAUDE_REFRESH_TOKEN }}
+    claude_expires_at: ${{ secrets.CLAUDE_EXPIRES_AT }}
+    secrets_admin_pat: ${{ secrets.SECRETS_ADMIN_PAT }}
     mcp_config: |
       {
         "mcpServers": {
@@ -402,8 +417,13 @@ This action is built on top of [`anthropics/claude-code-base-action`](https://gi
 You can pass custom environment variables to Claude Code execution using the `claude_env` input. This is useful for CI/test setups that require specific environment variables:
 
 ```yaml
-- uses: anthropics/claude-code-action@beta
+- uses: grll/claude-code-action@beta
   with:
+    use_oauth: true
+    claude_access_token: ${{ secrets.CLAUDE_ACCESS_TOKEN }}
+    claude_refresh_token: ${{ secrets.CLAUDE_REFRESH_TOKEN }}
+    claude_expires_at: ${{ secrets.CLAUDE_EXPIRES_AT }}
+    secrets_admin_pat: ${{ secrets.SECRETS_ADMIN_PAT }}
     claude_env: |
       NODE_ENV: test
       CI: true
@@ -422,9 +442,13 @@ You can use the `max_turns` parameter to limit the number of back-and-forth exch
 - Ensuring predictable behavior in CI/CD pipelines
 
 ```yaml
-- uses: anthropics/claude-code-action@beta
+- uses: grll/claude-code-action@beta
   with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+    use_oauth: true
+    claude_access_token: ${{ secrets.CLAUDE_ACCESS_TOKEN }}
+    claude_refresh_token: ${{ secrets.CLAUDE_REFRESH_TOKEN }}
+    claude_expires_at: ${{ secrets.CLAUDE_EXPIRES_AT }}
+    secrets_admin_pat: ${{ secrets.SECRETS_ADMIN_PAT }}
     max_turns: "5" # Limit to 5 conversation turns
     # ... other inputs
 ```
@@ -493,8 +517,8 @@ For detailed setup instructions for AWS Bedrock and Google Vertex AI, see the [o
 Use provider-specific model names based on your chosen provider:
 
 ```yaml
-# For direct Anthropic API (default)
-- uses: grll/claude-code-action@beta  # Fork with OAuth support
+# For direct Anthropic API (not recommended - use OAuth instead)
+- uses: grll/claude-code-action@beta
   with:
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
     # ... other inputs
