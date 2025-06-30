@@ -588,7 +588,7 @@ fi
 
 echo -e "${RED}${BOLD}⚠️  IMPORTANT: GitHub App Required ⚠️${NC}"
 echo -e "${BOLD}For @claude to work, you MUST install the official Anthropic GitHub App:${NC}"
-echo -e "   • Install here: ${CYAN}https://github.com/settings/installations/68058532${NC}"
+echo -e "   • Install here: ${CYAN}https://github.com/apps/claude${NC}"
 echo -e "   • Grant access to: ${GREEN}$REPO_NAME${NC}"
 echo -e "   • Without this app, @claude mentions will fail!"
 echo
