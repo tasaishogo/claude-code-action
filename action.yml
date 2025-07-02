@@ -145,7 +145,7 @@ runs:
     - name: Run Claude Code
       id: claude-code
       if: steps.prepare.outputs.contains_trigger == 'true'
-      uses: grll/claude-code-base-action@c29ecaef96cc3d0d5c33707418f339e08bc9396b # Latest commit from fork with critical fix
+      uses: grll/claude-code-base-action@23bbdc7269ba146d813349a08c303121fdbbb44f # Latest commit from fork with critical fix
       with:
         prompt_file: ${{ runner.temp }}/claude-prompts/claude-prompt.txt
         allowed_tools: ${{ env.ALLOWED_TOOLS }}
